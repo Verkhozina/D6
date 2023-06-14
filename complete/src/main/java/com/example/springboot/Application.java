@@ -65,7 +65,7 @@ public class Application {
 		Statement statement = connection.createStatement();
 		ResultSet rs = statement.executeQuery("SELECT airports.city from airports");
 		while (rs.next()) {
-			res.append("{\"Name\": \"").append(rs.getString("city")).append("\"}");
+			res.append("{\"Name\": \"").append(rs.getString("city")).append("\"}\n");
 		}
 		return res.toString();
 	}
