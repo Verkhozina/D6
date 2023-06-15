@@ -46,6 +46,24 @@ public class Application {
 				System.out.println("Failed to make connection to database");
 			}
 
+//		StringBuilder res = new StringBuilder();
+//			try {
+//				Statement statement = connection.createStatement();
+//				ResultSet rs = statement.executeQuery("SELECT airports_data.airport_code, airports_data.airport_name from airports_data");
+//				while (rs.next()) {
+//					String name = rs.getString("airport_name");
+//					name = name.split("\"")[3];
+//					res.append("{\"Code\": \"").append(rs.getString("airport_code"))
+//							.append("\", \"Name\": \"").append(name).append("\"}, ");
+//				}
+//			} catch (SQLException e) {
+//				throw new RuntimeException(e);
+//			}
+//		res.insert(0, "[");
+//		res.delete(res.length() - 2, res.length() - 1);
+//		res.append("]");
+//		System.out.println(res.toString());
+
 		SpringApplication.run(Application.class, args);
 	}
 
@@ -55,6 +73,21 @@ public class Application {
 		ResultSet rs = statement.executeQuery("SELECT airports.city from airports");
 		while (rs.next()) {
 			res.append("{\"Name\": \"").append(rs.getString("city")).append("\"}, ");
+		}
+		res.insert(0, "[");
+		res.delete(res.length() - 2, res.length() - 1);
+		res.append("]");
+		return res.toString();
+	}
+
+	static String getCitiesEn() throws SQLException {
+		StringBuilder res = new StringBuilder();
+		Statement statement = connection.createStatement();
+		ResultSet rs = statement.executeQuery("SELECT airports_data.city from airports_data");
+		while (rs.next()) {
+			String name = rs.getString("city");
+			name = name.split("\"")[3];
+			res.append("{\"Name\": \"").append(name).append("\"}, ");
 		}
 		res.insert(0, "[");
 		res.delete(res.length() - 2, res.length() - 1);
@@ -75,6 +108,21 @@ public class Application {
 		res.append("]");
 		return res.toString();
 	}
+	static String getAirportsEn() throws SQLException {
+		StringBuilder res = new StringBuilder();
+		Statement statement = connection.createStatement();
+		ResultSet rs = statement.executeQuery("SELECT airports_data.airport_code, airports_data.airport_name from airports_data");
+		while (rs.next()) {
+			String name = rs.getString("airport_name");
+			name = name.split("\"")[3];
+			res.append("{\"Code\": \"").append(rs.getString("airport_code"))
+					.append("\", \"Name\": \"").append(name).append("\"}, ");
+		}
+		res.insert(0, "[");
+		res.delete(res.length() - 2, res.length() - 1);
+		res.append("]");
+		return res.toString();
+	}
 	static String getAirportsByCity(String name) throws SQLException {
 		StringBuilder res = new StringBuilder();
 		Statement statement = connection.createStatement();
@@ -83,6 +131,22 @@ public class Application {
 		while (rs.next()) {
 			res.append("{\"Code\": \"").append(rs.getString("airport_code"))
 					.append("\", \"Name\": \"").append(rs.getString("airport_name")).append("\"}, ");
+		}
+		res.insert(0, "[");
+		res.delete(res.length() - 2, res.length() - 1);
+		res.append("]");
+		return res.toString();
+	}
+	static String getAirportsByCityEn(String cityName) throws SQLException {
+		StringBuilder res = new StringBuilder();
+		Statement statement = connection.createStatement();
+		ResultSet rs = statement.executeQuery("SELECT airports_data.airport_code, airports_data.airport_name from airports_data\n" +
+				"where city ->> 'en' = '" + cityName + "';");
+		while (rs.next()) {
+			String name = rs.getString("airport_name");
+			name = name.split("\"")[3];
+			res.append("{\"Code\": \"").append(rs.getString("airport_code"))
+					.append("\", \"Name\": \"").append(name).append("\"}, ");
 		}
 		res.insert(0, "[");
 		res.delete(res.length() - 2, res.length() - 1);
