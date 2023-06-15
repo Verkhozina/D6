@@ -49,24 +49,16 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-	static String getCity(String name) throws SQLException {
-		StringBuilder res = new StringBuilder();
-		Statement statement = connection.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT DISTINCT ON (city) airports.city from airports\n" +
-				"WHERE city = '" + name + "';");
-		while (rs.next()) {
-			res.append("{\"Name\": \"").append(rs.getString("city")).append("\"}\n");
-		}
-		return res.toString();
-	}
-
 	static String getCities() throws SQLException {
 		StringBuilder res = new StringBuilder();
 		Statement statement = connection.createStatement();
 		ResultSet rs = statement.executeQuery("SELECT airports.city from airports");
 		while (rs.next()) {
-			res.append("{\"Name\": \"").append(rs.getString("city")).append("\"}\n");
+			res.append("{\"Name\": \"").append(rs.getString("city")).append("\"}, ");
 		}
+		res.insert(0, "[");
+		res.delete(res.length() - 2, res.length() - 1);
+		res.append("]");
 		return res.toString();
 	}
 
@@ -76,8 +68,11 @@ public class Application {
 		ResultSet rs = statement.executeQuery("SELECT airports.airport_code, airports.airport_name from airports");
 		while (rs.next()) {
 			res.append("{\"Code\": \"").append(rs.getString("airport_code"))
-					.append("\", \"Name\": \"").append(rs.getString("airport_name")).append("\"}\n");
+					.append("\", \"Name\": \"").append(rs.getString("airport_name")).append("\"}, ");
 		}
+		res.insert(0, "[");
+		res.delete(res.length() - 2, res.length() - 1);
+		res.append("]");
 		return res.toString();
 	}
 	static String getAirportsByCity(String name) throws SQLException {
@@ -87,8 +82,11 @@ public class Application {
 				"WHERE city = '" + name + "';");
 		while (rs.next()) {
 			res.append("{\"Code\": \"").append(rs.getString("airport_code"))
-					.append("\", \"Name\": \"").append(rs.getString("airport_name")).append("\"}\n");
+					.append("\", \"Name\": \"").append(rs.getString("airport_name")).append("\"}, ");
 		}
+		res.insert(0, "[");
+		res.delete(res.length() - 2, res.length() - 1);
+		res.append("]");
 		return res.toString();
 	}
 

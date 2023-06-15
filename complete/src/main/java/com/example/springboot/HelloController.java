@@ -11,11 +11,8 @@ public class HelloController {
 
 
 	@GetMapping("/get/cities")
-	public String cities(@RequestParam(name="name", required=false, defaultValue="null") String name, Model model) throws SQLException {
-		if (name.equals("null"))
+	public String cities() throws SQLException {
 		return Application.getCities();
-		else
-			return Application.getCity(name);
 	}
 	@GetMapping("/get/airports")
 	public String airports(@RequestParam(name="cityName", required=false, defaultValue="null") String name, Model model) throws SQLException {
